@@ -1,0 +1,40 @@
+{
+  "name": "xy-portal-frontend",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "星元空间统一数字门户前端项目",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc && vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
+    "type-check": "vue-tsc --noEmit",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage"
+  },
+  "dependencies": {
+    "vue": "^3.4.21",
+    "vue-router": "^4.3.0",
+    "pinia": "^2.1.7",
+    "element-plus": "^2.6.3",
+    "axios": "^1.6.7",
+    "@element-plus/icons-vue": "^2.3.1",
+    "sortablejs": "^1.15.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.4",
+    "@vue/eslint-config-typescript": "^13.0.0",
+    "@vue/tsconfig": "^0.5.1",
+    "typescript": "~5.4.5",
+    "vite": "^5.2.0",
+    "vue-tsc": "^2.0.6",
+    "eslint": "^8.57.0",
+    "eslint-plugin-vue": "^9.23.0",
+    "vitest": "^1.0.0",
+    "@vue/test-utils": "^2.4.0",
+    "jsdom": "^23.0.0",
+    "@vitest/ui": "^1.0.0",
+    "@types/sortablejs": "^1.15.0"
+  }
+}

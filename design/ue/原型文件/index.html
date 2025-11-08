@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>星元空间 - 原型导航</title>
+    <link rel="stylesheet" href="assets/css/common.css">
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .nav-container {
+            background: var(--color-bg-white);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xxxl);
+            box-shadow: var(--shadow-lg);
+            max-width: 800px;
+            width: 90%;
+        }
+
+        .nav-header {
+            text-align: center;
+            margin-bottom: var(--spacing-xxxl);
+        }
+
+        .nav-header h1 {
+            font-size: 32px;
+            color: var(--color-text-primary);
+            margin-bottom: 8px;
+        }
+
+        .nav-header p {
+            color: var(--color-text-secondary);
+            font-size: 16px;
+        }
+
+        .prototype-list {
+            display: grid;
+            gap: var(--spacing-lg);
+        }
+
+        .prototype-item {
+            background: var(--color-bg);
+            border: 1px solid var(--color-border-lighter);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-xxl);
+            transition: all 0.3s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .prototype-item:hover {
+            border-color: var(--color-primary);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .prototype-item h3 {
+            font-size: 20px;
+            color: var(--color-text-primary);
+            margin-bottom: 8px;
+        }
+
+        .prototype-item p {
+            color: var(--color-text-secondary);
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .prototype-item .features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .prototype-item .feature-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            background: var(--color-bg-white);
+            color: var(--color-text-regular);
+            border-radius: 12px;
+            font-size: 12px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: var(--color-success);
+            color: white;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-left: 8px;
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            body {
+                padding: var(--spacing-md);
+            }
+
+            .nav-container {
+                padding: var(--spacing-xl);
+                width: 100%;
+                max-width: 100%;
+            }
+
+            .nav-header h1 {
+                font-size: 24px;
+            }
+
+            .nav-header p {
+                font-size: 14px;
+            }
+
+            .prototype-item {
+                padding: var(--spacing-lg);
+            }
+
+            .prototype-item h3 {
+                font-size: 18px;
+            }
+
+            .prototype-item p {
+                font-size: 13px;
+            }
+
+            .feature-tag {
+                font-size: 11px;
+                padding: 3px 10px;
+            }
+        }
+
+        /* 小屏幕手机 */
+        @media (max-width: 480px) {
+            .nav-container {
+                padding: var(--spacing-lg);
+            }
+
+            .nav-header h1 {
+                font-size: 20px;
+            }
+
+            .prototype-item {
+                padding: var(--spacing-md);
+            }
+
+            .prototype-item h3 {
+                font-size: 16px;
+            }
+
+            .features {
+                gap: 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-container">
+        <div class="nav-header">
+            <h1>星元空间 统一数字门户</h1>
+            <p>原型演示导航</p>
+        </div>
+
+        <div class="prototype-list">
+            <a href="login-prototype.html" class="prototype-item">
+                <h3>登录页面 <span class="status-badge">已完成</span></h3>
+                <p>统一 SSO 登录，支持表单验证和记住密码功能</p>
+                <div class="features">
+                    <span class="feature-tag">SSO 登录</span>
+                    <span class="feature-tag">表单验证</span>
+                    <span class="feature-tag">响应式设计</span>
+                    <span class="feature-tag">实时预览</span>
+                </div>
+            </a>
+
+            <a href="portal-prototype.html" class="prototype-item">
+                <h3>工作台页面 <span class="status-badge">已完成</span></h3>
+                <p>个性化工作台，包含统计卡片、系统入口、待办任务和活动记录</p>
+                <div class="features">
+                    <span class="feature-tag">统计看板</span>
+                    <span class="feature-tag">应用卡片</span>
+                    <span class="feature-tag">拖拽排序</span>
+                    <span class="feature-tag">待办任务</span>
+                    <span class="feature-tag">活动记录</span>
+                    <span class="feature-tag">实时预览</span>
+                </div>
+            </a>
+
+            <a href="entry-management-prototype.html" class="prototype-item">
+                <h3>系统入口管理 <span class="status-badge">已完成</span></h3>
+                <p>系统入口的增删改查，支持搜索、筛选和视图切换</p>
+                <div class="features">
+                    <span class="feature-tag">CRUD 操作</span>
+                    <span class="feature-tag">搜索筛选</span>
+                    <span class="feature-tag">网格/列表视图</span>
+                    <span class="feature-tag">统计信息</span>
+                    <span class="feature-tag">实时预览</span>
+                </div>
+            </a>
+        </div>
+
+        <div style="margin-top: var(--spacing-xxl); padding-top: var(--spacing-xxl); border-top: 1px solid var(--color-border-lighter); text-align: center; color: var(--color-text-secondary); font-size: 14px;">
+            <p>所有原型均支持响应式设计，可在移动端和桌面端正常使用</p>
+            <p style="margin-top: 8px; color: var(--color-primary); font-weight: 500;">
+                🔄 实时预览模式已启用：修改文件后浏览器会自动刷新
+            </p>
+        </div>
+    </div>
+    <script src="assets/js/common.js"></script>
+</body>
+</html>
+

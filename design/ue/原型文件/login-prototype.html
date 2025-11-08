@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>星元空间 - 登录页原型</title>
+    <link rel="stylesheet" href="assets/css/common.css">
+    <style>
+        .login-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 1200px;
+            background: var(--color-bg-white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            display: flex;
+            min-height: 600px;
+        }
+
+        .login-brand {
+            flex: 1;
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-active) 100%);
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            color: white;
+        }
+
+        .login-brand h1 {
+            font-size: 36px;
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+
+        .login-brand p {
+            font-size: 20px;
+            opacity: 0.9;
+            margin-bottom: 40px;
+        }
+
+        .login-brand .features {
+            list-style: none;
+        }
+
+        .login-brand .features li {
+            display: flex;
+            align-items: start;
+            gap: 12px;
+            margin-bottom: 20px;
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .login-brand .features li::before {
+            content: '✓';
+            width: 24px;
+            height: 24px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .login-form-container {
+            flex: 1;
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-form-container h2 {
+            font-size: 24px;
+            color: var(--color-text-primary);
+            margin-bottom: 32px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--color-text-primary);
+            font-size: 14px;
+        }
+
+        .form-group .input-wrapper {
+            position: relative;
+        }
+
+        .form-group .input-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--color-text-placeholder);
+            width: 20px;
+            height: 20px;
+        }
+
+        .form-group input {
+            padding-left: 40px;
+        }
+
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .remember-me input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        .forgot-password {
+            color: var(--color-primary);
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            color: var(--color-danger);
+            font-size: 12px;
+            margin-top: 6px;
+            display: none;
+        }
+
+        .input.error {
+            border-color: var(--color-danger);
+        }
+
+        .login-btn {
+            width: 100%;
+            margin-bottom: 16px;
+        }
+
+        .help-link {
+            text-align: center;
+            margin-top: 24px;
+        }
+
+        .help-link a {
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .help-link a:hover {
+            color: var(--color-primary);
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            .login-page {
+                padding: 10px;
+                align-items: flex-start;
+                padding-top: 20px;
+            }
+
+            .login-container {
+                flex-direction: column;
+                min-height: auto;
+                max-width: 100%;
+                border-radius: var(--radius-md);
+            }
+
+            .login-brand {
+                padding: 30px 20px;
+                min-height: auto;
+            }
+
+            .login-brand h1 {
+                font-size: 24px;
+                margin-bottom: 12px;
+            }
+
+            .login-brand p {
+                font-size: 14px;
+                margin-bottom: 24px;
+            }
+
+            .login-brand .features {
+                font-size: 13px;
+                gap: 8px;
+            }
+
+            .login-brand .features li {
+                padding: 6px 0;
+            }
+
+            .login-form-container {
+                padding: 30px 20px;
+            }
+
+            .login-form-container h2 {
+                font-size: 20px;
+            }
+
+            .login-btn {
+                width: 100%;
+                padding: 14px;
+                font-size: 16px;
+            }
+        }
+
+        /* 小屏幕手机 */
+        @media (max-width: 480px) {
+            .login-page {
+                padding: 0;
+            }
+
+            .login-container {
+                border-radius: 0;
+                min-height: 100vh;
+            }
+
+            .login-brand {
+                padding: 24px 16px;
+            }
+
+            .login-brand h1 {
+                font-size: 22px;
+            }
+
+            .login-form-container {
+                padding: 24px 16px;
+            }
+        }
+
+        /* 横屏优化 */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .login-container {
+                max-height: 100vh;
+                overflow-y: auto;
+            }
+
+            .login-brand {
+                min-height: auto;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-page">
+        <div class="login-container">
+            <!-- 左侧品牌展示区 -->
+            <div class="login-brand">
+                <h1>星元空间</h1>
+                <p>统一数字门户</p>
+                <ul class="features">
+                    <li>一站式企业应用访问入口</li>
+                    <li>个性化工作台，提升工作效率</li>
+                    <li>统一任务管理，一目了然</li>
+                    <li>安全可靠的SSO单点登录</li>
+                </ul>
+            </div>
+
+            <!-- 右侧登录表单 -->
+            <div class="login-form-container">
+                <h2>欢迎登录</h2>
+                <p style="color: var(--color-text-secondary); margin-bottom: 40px; font-size: 14px;">
+                    使用统一SSO单点登录访问系统
+                </p>
+
+                <!-- SSO 登录表单 -->
+                <form id="ssoForm" class="login-form">
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary login-btn">
+                            使用SSO登录
+                        </button>
+                        <p style="text-align: center; color: var(--color-text-secondary); margin-top: 16px; font-size: 14px;">
+                            点击后将跳转到统一认证平台
+                        </p>
+                    </div>
+                </form>
+
+                <div class="help-link">
+                    <a href="#">首次登录？查看使用指南</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/common.js"></script>
+    <script>
+        // SSO 登录
+        document.getElementById('ssoForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            btn.textContent = '正在跳转...';
+            btn.disabled = true;
+            
+            showToast('正在跳转到SSO认证平台...', 'success');
+            setTimeout(() => {
+                showToast('登录成功！跳转到工作台...', 'success');
+                setTimeout(() => {
+                    window.location.href = 'portal-prototype.html';
+                }, 1000);
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
+

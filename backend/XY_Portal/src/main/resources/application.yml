@@ -1,0 +1,34 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+spring:
+  application:
+    name: xy-portal
+  
+  datasource:
+    url: jdbc:mysql://localhost:3306/xy_portal?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
+jwt:
+  secret: xy-portal-secret-key-2025-01-15-change-in-production
+  expiration: 86400000 # 24小时，单位：毫秒
+
+logging:
+  level:
+    com.xy.portal: DEBUG
+    org.springframework.web: INFO
+    org.hibernate: INFO
+
