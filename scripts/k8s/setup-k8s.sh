@@ -55,19 +55,33 @@ EOF
         # 尝试多个下载源，带超时和进度显示（优先使用阿里云镜像）
         DOWNLOAD_SUCCESS=false
         
-        # 方法1：使用 GitHub 代理（ghproxy.com，国内镜像首选）
-        echo "尝试从 GitHub 代理下载（国内镜像）..."
+        # 方法1：使用阿里云镜像站（首选）
+        echo "尝试从阿里云镜像站下载..."
         if curl -L --connect-timeout 10 --max-time 300 --progress-bar \
-           https://ghproxy.com/https://github.com/kubernetes/minikube/releases/download/${MINIKUBE_VERSION}/minikube-linux-amd64 \
+           https://mirrors.aliyun.com/kubernetes/minikube/releases/download/${MINIKUBE_VERSION}/minikube-linux-amd64 \
            -o minikube && [ -f minikube ] && [ -s minikube ]; then
             DOWNLOAD_SUCCESS=true
             echo ""
-            echo "✓ 从 GitHub 代理下载成功"
+            echo "✓ 从阿里云镜像站下载成功"
         else
-            echo "下载失败，尝试下一个源..."
+            echo "阿里云镜像站下载失败，尝试备用源..."
         fi
         
-        # 方法2：使用其他国内镜像（如果方法1失败）
+        # 方法2：使用 GitHub 代理（ghproxy.com，备用）
+        if [ "$DOWNLOAD_SUCCESS" = false ]; then
+            echo "尝试从 GitHub 代理下载（国内镜像）..."
+            if curl -L --connect-timeout 10 --max-time 300 --progress-bar \
+               https://ghproxy.com/https://github.com/kubernetes/minikube/releases/download/${MINIKUBE_VERSION}/minikube-linux-amd64 \
+               -o minikube && [ -f minikube ] && [ -s minikube ]; then
+                DOWNLOAD_SUCCESS=true
+                echo ""
+                echo "✓ 从 GitHub 代理下载成功"
+            else
+                echo "下载失败，尝试下一个源..."
+            fi
+        fi
+        
+        # 方法3：使用其他国内镜像（备用）
         if [ "$DOWNLOAD_SUCCESS" = false ]; then
             echo "尝试从其他国内镜像下载..."
             if curl -L --connect-timeout 10 --max-time 300 --progress-bar \
@@ -81,7 +95,7 @@ EOF
             fi
         fi
         
-        # 方法3：使用 GitHub 直接下载（备用）
+        # 方法4：使用 GitHub 直接下载（备用）
         if [ "$DOWNLOAD_SUCCESS" = false ]; then
             echo "尝试从 GitHub 直接下载..."
             if curl -L --connect-timeout 10 --max-time 300 --progress-bar \
@@ -91,11 +105,11 @@ EOF
                 echo ""
                 echo "✓ 从 GitHub 下载成功"
             else
-                echo "下载失败，尝试下一个源..."
+                echo "下载失败，尝试最后一个源..."
             fi
         fi
         
-        # 方法4：使用 Google Storage（最后备用）
+        # 方法5：使用 Google Storage（最后备用）
         if [ "$DOWNLOAD_SUCCESS" = false ]; then
             echo "尝试从 Google Storage 下载..."
             if curl -L --connect-timeout 10 --max-time 300 --progress-bar \
