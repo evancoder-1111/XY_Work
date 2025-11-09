@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis-master-config
+  labels:
+    app: redis
+    role: master
+data:
+  redis.conf: |
+    # 网络配置
+    bind 0.0.0.0
+    protected-mode no
+    port 6379
+    
+    # 持久化配置
+    save 900 1
+    save 300 10
+    save 60 10000
+    appendonly yes
+    appendfsync everysec
+    
+    # 内存配置
+    maxmemory 2gb
+    maxmemory-policy allkeys-lru
+    
+    # 日志配置
+    loglevel notice
+    
+    # 主从复制配置
+    replica-serve-stale-data yes
+    replica-read-only yes
+

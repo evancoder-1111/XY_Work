@@ -1,5 +1,9 @@
 # AI数字门户项目
 
+## 📚 文档导航
+
+> **快速查找文档**: 项目包含57个Markdown文档，查看 [📚 完整文档索引](./DOCS_INDEX.md) 快速定位所需文档
+
 ## 项目简介
 
 这是一个基于AI技术的统一数字门户系统，包含以下核心功能：
@@ -115,7 +119,7 @@ git commit -m "初始提交：星元空间统一数字门户项目"
 
 ### 环境要求
 - Node.js >= 18.0.0
-- Java >= 17
+- Java >= 21
 - MySQL >= 8.0
 - Maven >= 3.8
 
@@ -136,6 +140,9 @@ mvn spring-boot:run
 后端服务将运行在 `http://localhost:8080`
 
 ### 数据库初始化
+
+#### 方式一：本地数据库（开发环境）
+
 1. 创建 MySQL 数据库：
 ```sql
 CREATE DATABASE IF NOT EXISTS `xy_portal` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -158,6 +165,33 @@ spring:
     username: root
     password: your_password
 ```
+
+#### 方式二：Kubernetes 部署（生产/测试环境）
+
+**服务器信息**：
+- IP 地址: `192.168.2.75`
+- 详细服务器信息请参考 [服务器信息文档](./docs/k8s/server-info.md)
+
+详细部署指南请参考 [Kubernetes 部署文档](./docs/k8s/deployment-guide.md)
+
+快速部署步骤：
+```bash
+# 1. 在 CentOS 7 虚拟机上部署数据库
+sudo bash scripts/k8s/setup-centos.sh
+sudo bash scripts/k8s/install-docker.sh
+bash scripts/k8s/setup-k8s.sh minikube  # 或 k3s
+sudo bash scripts/k8s/prepare-storage.sh
+bash scripts/k8s/deploy-all.sh
+
+# 2. 部署应用
+bash scripts/cicd/setup-registry.sh
+bash scripts/cicd/build-images.sh
+bash scripts/cicd/deploy-app.sh
+```
+
+**访问应用**：
+- 前端: http://192.168.2.75:30081
+- 后端 API: http://192.168.2.75:30080
 
 ### 测试账号
 - 用户名：`admin`
@@ -196,6 +230,34 @@ spring:
 - [数据库设计文档](./docs/database/数据库设计文档.md)
 - [设计规范](./design/ui/README.md)
 - [需求文档](./docs/requirements/一阶段_前后端功能.md)
+
+## 部署指南
+
+### Kubernetes 部署
+
+项目支持在 Kubernetes 集群中部署，包含完整的数据库和应用部署配置：
+
+- [Kubernetes 部署完整指南](./docs/k8s/deployment-guide.md)
+- [Kubernetes 连接信息](./docs/k8s/connection-info.md)
+- [故障排查指南](./docs/k8s/troubleshooting.md)
+
+### Docker 部署
+
+项目包含 Dockerfile，支持容器化部署：
+
+- 后端：`backend/XY_Portal/Dockerfile`
+- 前端：`frontend/XY_Portal_Frontend/Dockerfile`
+
+构建镜像：
+```bash
+# 构建后端镜像
+cd backend/XY_Portal
+docker build -t xy-portal-backend:latest .
+
+# 构建前端镜像
+cd frontend/XY_Portal_Frontend
+docker build -t xy-portal-frontend:latest .
+```
 
 ## 贡献指南
 

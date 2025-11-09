@@ -21,12 +21,27 @@
           clearable
           @change="handleSearch"
         >
-          <el-option label="全部" value="" />
-          <el-option label="业务系统" value="业务系统" />
-          <el-option label="协作工具" value="协作工具" />
-          <el-option label="管理系统" value="管理系统" />
+          <el-option
+            label="全部"
+            value=""
+          />
+          <el-option
+            label="业务系统"
+            value="业务系统"
+          />
+          <el-option
+            label="协作工具"
+            value="协作工具"
+          />
+          <el-option
+            label="管理系统"
+            value="管理系统"
+          />
         </el-select>
-        <el-button type="primary" @click="handleAdd">
+        <el-button
+          type="primary"
+          @click="handleAdd"
+        >
           <el-icon><Plus /></el-icon>
           添加入口
         </el-button>
@@ -35,29 +50,67 @@
 
     <!-- 入口列表 -->
     <el-card>
-      <el-table :data="filteredEntries" style="width: 100%" v-loading="loading">
-        <el-table-column prop="name" label="名称" width="200" />
-        <el-table-column prop="description" label="描述" />
-        <el-table-column prop="icon" label="图标" width="80">
+      <el-table
+        v-loading="loading"
+        :data="filteredEntries"
+        style="width: 100%"
+      >
+        <el-table-column
+          prop="name"
+          label="名称"
+          width="200"
+        />
+        <el-table-column
+          prop="description"
+          label="描述"
+        />
+        <el-table-column
+          prop="icon"
+          label="图标"
+          width="80"
+        >
           <template #default="{ row }">
             <span style="font-size: 24px">{{ row.icon || '📦' }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="url" label="访问地址" />
-        <el-table-column prop="category" label="分类" width="120" />
-        <el-table-column prop="status" label="状态" width="100">
+        <el-table-column
+          prop="url"
+          label="访问地址"
+        />
+        <el-table-column
+          prop="category"
+          label="分类"
+          width="120"
+        />
+        <el-table-column
+          prop="status"
+          label="状态"
+          width="100"
+        >
           <template #default="{ row }">
             <el-tag :type="row.status === 'ACTIVE' ? 'success' : 'info'">
               {{ row.status === 'ACTIVE' ? '启用' : '禁用' }}
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="180" fixed="right">
+        <el-table-column
+          label="操作"
+          width="180"
+          fixed="right"
+        >
           <template #default="{ row }">
-            <el-button type="primary" link @click="handleEdit(row)">
+            <el-button
+              type="primary"
+              link
+              @click="handleEdit(row)"
+            >
               编辑
             </el-button>
-            <el-button type="danger" link @click="handleDelete(row)">
+            <el-button
+              type="danger"
+              link
+              @click="handleDelete(row)"
+            >
               删除
             </el-button>
           </template>
@@ -72,11 +125,25 @@
       width="600px"
       @close="handleDialogClose"
     >
-      <el-form :model="formData" :rules="formRules" ref="formRef" label-width="100px">
-        <el-form-item label="系统名称" prop="name">
-          <el-input v-model="formData.name" placeholder="请输入系统名称" />
+      <el-form
+        ref="formRef"
+        :model="formData"
+        :rules="formRules"
+        label-width="100px"
+      >
+        <el-form-item
+          label="系统名称"
+          prop="name"
+        >
+          <el-input
+            v-model="formData.name"
+            placeholder="请输入系统名称"
+          />
         </el-form-item>
-        <el-form-item label="描述" prop="description">
+        <el-form-item
+          label="描述"
+          prop="description"
+        >
           <el-input
             v-model="formData.description"
             type="textarea"
@@ -84,32 +151,79 @@
             placeholder="请输入描述"
           />
         </el-form-item>
-        <el-form-item label="图标" prop="icon">
-          <el-input v-model="formData.icon" placeholder="请输入图标（emoji或URL）" />
+        <el-form-item
+          label="图标"
+          prop="icon"
+        >
+          <el-input
+            v-model="formData.icon"
+            placeholder="请输入图标（emoji或URL）"
+          />
         </el-form-item>
-        <el-form-item label="访问地址" prop="url">
-          <el-input v-model="formData.url" placeholder="请输入访问地址" />
+        <el-form-item
+          label="访问地址"
+          prop="url"
+        >
+          <el-input
+            v-model="formData.url"
+            placeholder="请输入访问地址"
+          />
         </el-form-item>
-        <el-form-item label="分类" prop="category">
-          <el-select v-model="formData.category" placeholder="请选择分类" style="width: 100%">
-            <el-option label="业务系统" value="业务系统" />
-            <el-option label="协作工具" value="协作工具" />
-            <el-option label="管理系统" value="管理系统" />
+        <el-form-item
+          label="分类"
+          prop="category"
+        >
+          <el-select
+            v-model="formData.category"
+            placeholder="请选择分类"
+            style="width: 100%"
+          >
+            <el-option
+              label="业务系统"
+              value="业务系统"
+            />
+            <el-option
+              label="协作工具"
+              value="协作工具"
+            />
+            <el-option
+              label="管理系统"
+              value="管理系统"
+            />
           </el-select>
         </el-form-item>
-        <el-form-item label="状态" prop="status">
+        <el-form-item
+          label="状态"
+          prop="status"
+        >
           <el-radio-group v-model="formData.status">
-            <el-radio label="ACTIVE">启用</el-radio>
-            <el-radio label="INACTIVE">禁用</el-radio>
+            <el-radio label="ACTIVE">
+              启用
+            </el-radio>
+            <el-radio label="INACTIVE">
+              禁用
+            </el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="排序" prop="sortOrder">
-          <el-input-number v-model="formData.sortOrder" :min="0" />
+        <el-form-item
+          label="排序"
+          prop="sortOrder"
+        >
+          <el-input-number
+            v-model="formData.sortOrder"
+            :min="0"
+          />
         </el-form-item>
       </el-form>
       <template #footer>
-        <el-button @click="dialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="handleSubmit" :loading="submitting">
+        <el-button @click="dialogVisible = false">
+          取消
+        </el-button>
+        <el-button
+          type="primary"
+          :loading="submitting"
+          @click="handleSubmit"
+        >
           确定
         </el-button>
       </template>

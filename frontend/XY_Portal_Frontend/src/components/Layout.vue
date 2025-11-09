@@ -3,15 +3,24 @@
     <el-container>
       <el-header class="header">
         <div class="header-left">
-          <button class="menu-toggle" @click="toggleSidebar" v-if="isMobile">
+          <button
+            v-if="isMobile"
+            class="menu-toggle"
+            @click="toggleSidebar"
+          >
             <el-icon><Menu /></el-icon>
           </button>
-          <h1 class="logo">星元空间</h1>
+          <h1 class="logo">
+            星元空间
+          </h1>
         </div>
         <div class="header-right">
           <el-dropdown @command="handleCommand">
             <span class="user-info">
-              <el-avatar :size="32" :src="userInfo?.avatar">
+              <el-avatar
+                :size="32"
+                :src="userInfo?.avatar"
+              >
                 <el-icon><User /></el-icon>
               </el-avatar>
               <span class="username">{{ userInfo?.nickname || userInfo?.username }}</span>
@@ -19,7 +28,9 @@
             </span>
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item command="logout">退出登录</el-dropdown-item>
+                <el-dropdown-item command="logout">
+                  退出登录
+                </el-dropdown-item>
               </el-dropdown-menu>
             </template>
           </el-dropdown>
@@ -31,18 +42,28 @@
           :class="{ 'mobile-open': sidebarOpen }"
           :width="isCollapse ? '64px' : '200px'"
         >
-          <div class="sidebar-overlay" v-if="isMobile && sidebarOpen" @click="closeSidebar"></div>
+          <div
+            v-if="isMobile && sidebarOpen"
+            class="sidebar-overlay"
+            @click="closeSidebar"
+          />
           <el-menu
             :default-active="activeMenu"
             :collapse="isCollapse"
             router
             class="sidebar-menu"
           >
-            <el-menu-item index="/portal/workbench" @click="handleMenuClick">
+            <el-menu-item
+              index="/portal/workbench"
+              @click="handleMenuClick"
+            >
               <el-icon><House /></el-icon>
               <span>工作台</span>
             </el-menu-item>
-            <el-menu-item index="/entry-management" @click="handleMenuClick">
+            <el-menu-item
+              index="/entry-management"
+              @click="handleMenuClick"
+            >
               <el-icon><Setting /></el-icon>
               <span>入口管理</span>
             </el-menu-item>

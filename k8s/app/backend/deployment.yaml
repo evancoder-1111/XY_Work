@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xy-portal-backend
+  labels:
+    app: xy-portal-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: xy-portal-backend
+  template:
+    metadata:
+      labels:
+        app: xy-portal-backend
+    spec:
+      containers:
+      - name: backend
+        image: 192.168.2.75:30500/xy-portal-backend:latest
+        # 如果使用 Docker Hub，使用：xy-portal/backend:latest
+        # 注意：如果服务器 IP 不同，请修改此地址
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+          name: http
+        env:
+        - name: SPRING_CONFIG_LOCATION
+          value: "file:/etc/config/application.yml"
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: backend-secret
+              key: jwt-secret
+        - name: JWT_EXPIRATION
+          valueFrom:
+            secretKeyRef:
+              name: backend-secret
+              key: jwt-expiration
+        volumeMounts:
+        - name: config
+          mountPath: /etc/config
+          readOnly: true
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+      volumes:
+      - name: config
+        configMap:
+          name: backend-config
+

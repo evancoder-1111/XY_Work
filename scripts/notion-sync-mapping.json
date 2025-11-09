@@ -1,0 +1,180 @@
+{
+  "rootPageId": "2a5ec34e-e0f0-819a-bcf3-df7b1fec40b0",
+  "categories": {
+    "项目概览": {
+      "pageId": "2a5ec34e-e0f0-816b-ad2d-c871dc27dbcb",
+      "documents": [
+        {
+          "file": "README.md",
+          "notionPageId": "2a5ec34e-e0f0-8167-86bd-ddd13163b9de",
+          "status": "synced"
+        },
+        {
+          "file": "CONTRIBUTING.md",
+          "status": "pending"
+        },
+        {
+          "file": "docs/执行总结.md",
+          "status": "pending"
+        }
+      ]
+    },
+    "需求与规划": {
+      "pageId": "2a5ec34e-e0f0-81d1-bc53-dc57844c138d",
+      "documents": [
+        {
+          "file": "docs/requirements/一阶段_前后端功能.md",
+          "status": "pending"
+        }
+      ]
+    },
+    "架构文档": {
+      "pageId": "2a5ec34e-e0f0-81a0-b5d2-d8a7d9f82175",
+      "documents": [
+        {
+          "file": "docs/architecture/技术架构.md",
+          "status": "pending"
+        },
+        {
+          "file": "docs/architecture/开发规范.md",
+          "status": "pending"
+        }
+      ]
+    },
+    "API文档": {
+      "pageId": "2a5ec34e-e0f0-8196-b5df-d1efc35e423b",
+      "documents": [
+        {
+          "file": "docs/api/API接口文档.md",
+          "status": "pending"
+        }
+      ]
+    },
+    "数据库文档": {
+      "pageId": "2a5ec34e-e0f0-8191-b27d-f9e5cd7b13fb",
+      "documents": [
+        {
+          "file": "docs/database/数据库设计文档.md",
+          "status": "pending"
+        }
+      ]
+    },
+    "设计文档": {
+      "pageId": "2a5ec34e-e0f0-8158-b93a-f424b922d7c6",
+      "documents": [
+        {
+          "file": "design/ui/设计规范.md",
+          "status": "pending"
+        },
+        {
+          "file": "design/ui/组件库规则.md",
+          "status": "pending"
+        },
+        {
+          "file": "design/ui/图标与图片资源规范.md",
+          "status": "pending"
+        },
+        {
+          "file": "design/ux/信息架构.md",
+          "status": "pending"
+        },
+        {
+          "file": "design/ux/用户角色与任务分析.md",
+          "status": "pending"
+        },
+        {
+          "file": "design/ux/用户体验设计方案.md",
+          "status": "pending"
+        },
+        {
+          "file": "design/ux/用户流程图.md",
+          "status": "pending"
+        },
+        {
+          "file": "design/ux/低保真线框图.md",
+          "status": "pending"
+        },
+        {
+          "file": "design/ux/用户测试与评估计划.md",
+          "status": "pending"
+        },
+        {
+          "file": "design/ue/XY_Work_移动端和Web端用户体验设计.md",
+          "status": "pending"
+        }
+      ]
+    },
+    "规范文档": {
+      "pageId": "2a5ec34e-e0f0-81f1-96bd-cc7cb5d88db5",
+      "documents": [
+        {
+          "file": "docs/rules/coding-standards.md",
+          "status": "pending"
+        },
+        {
+          "file": "docs/rules/api-style-guide.md",
+          "status": "pending"
+        },
+        {
+          "file": "docs/rules/ui-ux-guidelines.md",
+          "status": "pending"
+        },
+        {
+          "file": "docs/rules/testing-guidelines.md",
+          "status": "pending"
+        },
+        {
+          "file": "docs/rules/security-compliance.md",
+          "status": "pending"
+        },
+        {
+          "file": "docs/rules/documentation-style.md",
+          "status": "pending"
+        },
+        {
+          "file": "docs/rules/project_rules.md",
+          "status": "pending"
+        }
+      ]
+    },
+    "测试文档": {
+      "pageId": "2a5ec34e-e0f0-81f9-a95f-d335ff5cce39",
+      "documents": [
+        {
+          "file": "testing/单元测试/前端单元测试/README.md",
+          "status": "pending"
+        },
+        {
+          "file": "testing/单元测试/后端单元测试/README.md",
+          "status": "pending"
+        },
+        {
+          "file": "testing/集成测试/README.md",
+          "status": "pending"
+        },
+        {
+          "file": "testing/端到端测试/README.md",
+          "status": "pending"
+        },
+        {
+          "file": "testing/测试报告/README.md",
+          "status": "pending"
+        }
+      ]
+    },
+    "开发工具": {
+      "pageId": "2a5ec34e-e0f0-8187-9b77-c12ae2802bbb",
+      "documents": [
+        {
+          "file": "docs/Git提交指南.md",
+          "status": "pending"
+        },
+        {
+          "file": "docs/环境检查清单.md",
+          "status": "pending"
+        }
+      ]
+    }
+  }
+}
+

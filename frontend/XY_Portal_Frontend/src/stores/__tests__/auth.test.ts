@@ -31,7 +31,7 @@ describe('AuthStore', () => {
       data: mockUserInfo,
       code: 200,
       message: '成功'
-    })
+    } as any)
 
     const store = useAuthStore()
     await store.fetchUserInfo()
@@ -41,9 +41,10 @@ describe('AuthStore', () => {
 
   it('应该能够退出登录', async () => {
     vi.mocked(authApi.logout).mockResolvedValue({
+      data: null,
       code: 200,
       message: '成功'
-    })
+    } as any)
 
     const store = useAuthStore()
     store.token = 'test-token'

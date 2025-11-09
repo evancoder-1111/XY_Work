@@ -16,24 +16,16 @@ export const useAuthStore = defineStore('auth', () => {
   const userInfo = ref<UserInfo | null>(null)
 
   const fetchUserInfo = async () => {
-    try {
-      const response = await getUserInfo()
-      userInfo.value = response.data
-      return response
-    } catch (error) {
-      throw error
-    }
+    const response = await getUserInfo()
+    userInfo.value = response.data
+    return response
   }
 
   const logout = async () => {
-    try {
-      await apiLogout()
-      token.value = null
-      userInfo.value = null
-      localStorage.removeItem('token')
-    } catch (error) {
-      throw error
-    }
+    await apiLogout()
+    token.value = null
+    userInfo.value = null
+    localStorage.removeItem('token')
   }
 
   return {

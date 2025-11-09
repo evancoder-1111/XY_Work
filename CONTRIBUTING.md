@@ -28,7 +28,7 @@
 - 以里程碑与标签组织（如：P0/P1、frontend/backend）
 
 ## 6. 开发环境（Environment）
-- Node.js >= 18、Java >= 17、MySQL >= 8
+- Node.js >= 18、Java >= 21、MySQL 8.0
 - `.env` 管理环境变量；禁止将密钥提交到仓库
 
 ## 7. 合规与安全（Compliance & Security）

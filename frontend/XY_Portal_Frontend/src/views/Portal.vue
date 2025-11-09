@@ -1,18 +1,33 @@
 <template>
   <div class="portal-container">
     <!-- 统计卡片 -->
-    <el-row :gutter="20" class="stats-row">
-      <el-col :xs="12" :sm="6" v-for="stat in stats" :key="stat.label">
+    <el-row
+      :gutter="20"
+      class="stats-row"
+    >
+      <el-col
+        v-for="stat in stats"
+        :key="stat.label"
+        :xs="12"
+        :sm="6"
+      >
         <el-card class="stat-card">
           <div class="stat-content">
-            <div class="stat-icon" :style="{ background: stat.color }">
+            <div
+              class="stat-icon"
+              :style="{ background: stat.color }"
+            >
               <el-icon :size="24">
                 <component :is="stat.icon" />
               </el-icon>
             </div>
             <div class="stat-info">
-              <div class="stat-value">{{ stat.value }}</div>
-              <div class="stat-label">{{ stat.label }}</div>
+              <div class="stat-value">
+                {{ stat.value }}
+              </div>
+              <div class="stat-label">
+                {{ stat.label }}
+              </div>
             </div>
           </div>
         </el-card>
@@ -20,28 +35,58 @@
     </el-row>
 
     <!-- 应用入口网格 -->
-    <el-card class="entries-card" header="应用入口" v-loading="loading">
-      <div class="entries-grid" ref="entriesGridRef">
+    <el-card
+      v-loading="loading"
+      class="entries-card"
+      header="应用入口"
+    >
+      <div
+        ref="entriesGridRef"
+        class="entries-grid"
+      >
         <div
           v-for="entry in entries"
           :key="entry.id"
           class="entry-item"
           @click="handleEntryClick(entry)"
         >
-          <div class="entry-icon">{{ entry.icon || '📦' }}</div>
-          <div class="entry-name">{{ entry.name }}</div>
+          <div class="entry-icon">
+            {{ entry.icon || '📦' }}
+          </div>
+          <div class="entry-name">
+            {{ entry.name }}
+          </div>
         </div>
       </div>
     </el-card>
 
     <!-- 待办任务和活动记录 -->
-    <el-row :gutter="20" class="bottom-row">
-      <el-col :xs="24" :sm="12">
+    <el-row
+      :gutter="20"
+      class="bottom-row"
+    >
+      <el-col
+        :xs="24"
+        :sm="12"
+      >
         <el-card header="待办任务">
-          <el-empty v-if="tasks.length === 0" description="暂无待办任务" />
-          <div v-else class="task-list">
-            <div v-for="task in tasks" :key="task.id" class="task-item">
-              <el-tag :type="getTaskTagType(task.status)" size="small">
+          <el-empty
+            v-if="tasks.length === 0"
+            description="暂无待办任务"
+          />
+          <div
+            v-else
+            class="task-list"
+          >
+            <div
+              v-for="task in tasks"
+              :key="task.id"
+              class="task-item"
+            >
+              <el-tag
+                :type="getTaskTagType(task.status)"
+                size="small"
+              >
                 {{ task.status }}
               </el-tag>
               <span class="task-title">{{ task.title }}</span>
@@ -50,14 +95,33 @@
           </div>
         </el-card>
       </el-col>
-      <el-col :xs="24" :sm="12">
+      <el-col
+        :xs="24"
+        :sm="12"
+      >
         <el-card header="最近活动">
-          <el-empty v-if="activities.length === 0" description="暂无活动记录" />
-          <div v-else class="activity-list">
-            <div v-for="(activity, index) in activities" :key="index" class="activity-item">
-              <div class="activity-type">{{ activity.type }}</div>
-              <div class="activity-desc">{{ activity.description }}</div>
-              <div class="activity-time">{{ activity.time }}</div>
+          <el-empty
+            v-if="activities.length === 0"
+            description="暂无活动记录"
+          />
+          <div
+            v-else
+            class="activity-list"
+          >
+            <div
+              v-for="(activity, index) in activities"
+              :key="index"
+              class="activity-item"
+            >
+              <div class="activity-type">
+                {{ activity.type }}
+              </div>
+              <div class="activity-desc">
+                {{ activity.description }}
+              </div>
+              <div class="activity-time">
+                {{ activity.time }}
+              </div>
             </div>
           </div>
         </el-card>
@@ -70,7 +134,7 @@
 import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { getDashboardStats } from '@/api/dashboard'
 import { getEntries, updateSortOrder } from '@/api/portal'
-import type { DashboardStats, Task, RecentActivity } from '@/api/dashboard'
+import type { Task, RecentActivity } from '@/api/dashboard'
 import type { PortalEntry } from '@/api/portal'
 import { Document, User, Clock, List } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
@@ -87,6 +151,8 @@ const entries = ref<PortalEntry[]>([])
 const tasks = ref<Task[]>([])
 const activities = ref<RecentActivity[]>([])
 const entriesGridRef = ref<HTMLElement>()
+const loading = ref(false)
+let sortableInstance: Sortable | null = null
 
 const loadDashboardData = async () => {
   loading.value = true
@@ -137,7 +203,7 @@ const initSortable = () => {
       handle: '.entry-item',
       onEnd: async (evt: SortableEvent) => {
         const { oldIndex, newIndex } = evt
-        if (oldIndex === null || newIndex === null || oldIndex === newIndex) return
+        if (oldIndex === null || oldIndex === undefined || newIndex === null || newIndex === undefined || oldIndex === newIndex) return
 
         // 更新本地数组顺序
         const movedItem = entries.value.splice(oldIndex, 1)[0]
@@ -145,7 +211,7 @@ const initSortable = () => {
 
         // 保存排序到后端
         try {
-          const entryIds = entries.value.map(entry => entry.id!).filter(id => id !== undefined)
+          const entryIds = entries.value.map(entry => entry.id).filter((id): id is number => id !== undefined)
           await updateSortOrder(entryIds)
           ElMessage.success('排序已保存')
         } catch (error) {

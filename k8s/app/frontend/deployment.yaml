@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xy-portal-frontend
+  labels:
+    app: xy-portal-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: xy-portal-frontend
+  template:
+    metadata:
+      labels:
+        app: xy-portal-frontend
+    spec:
+      containers:
+      - name: frontend
+        image: 192.168.2.75:30500/xy-portal-frontend:latest
+        # 如果使用 Docker Hub，使用：xy-portal/frontend:latest
+        # 注意：如果服务器 IP 不同，请修改此地址
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+          name: http
+        volumeMounts:
+        - name: nginx-config
+          mountPath: /etc/nginx/conf.d
+          readOnly: true
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+      volumes:
+      - name: nginx-config
+        configMap:
+          name: frontend-config
+

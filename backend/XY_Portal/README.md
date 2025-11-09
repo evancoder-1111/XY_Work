@@ -8,7 +8,7 @@
 
 | 技术/框架 | 版本 | 用途 |
 |---------|------|------|
-| Java | 17 | 编程语言 |
+| Java | 21 | 编程语言 |
 | Spring Boot | 3.x | 后端框架 |
 | Spring Security | 6.x | 安全框架 |
 | Spring Data JPA | 3.x | ORM框架 |

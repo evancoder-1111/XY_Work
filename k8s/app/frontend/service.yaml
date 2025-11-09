@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: xy-portal-frontend
+  labels:
+    app: xy-portal-frontend
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+    name: http
+  selector:
+    app: xy-portal-frontend
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: xy-portal-frontend-nodeport
+  labels:
+    app: xy-portal-frontend
+spec:
+  type: NodePort
+  ports:
+  - port: 80
+    targetPort: 80
+    nodePort: 30081
+    protocol: TCP
+    name: http
+  selector:
+    app: xy-portal-frontend
+

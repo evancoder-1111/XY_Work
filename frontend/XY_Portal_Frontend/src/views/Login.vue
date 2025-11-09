@@ -1,9 +1,17 @@
 <template>
   <div class="login-container">
     <div class="login-box">
-      <h1 class="login-title">星元空间</h1>
-      <p class="login-subtitle">统一数字门户</p>
-      <el-form :model="loginForm" :rules="rules" ref="loginFormRef">
+      <h1 class="login-title">
+        星元空间
+      </h1>
+      <p class="login-subtitle">
+        统一数字门户
+      </p>
+      <el-form
+        ref="loginFormRef"
+        :model="loginForm"
+        :rules="rules"
+      >
         <el-form-item prop="username">
           <el-input
             v-model="loginForm.username"
@@ -32,9 +40,9 @@
           <el-button
             type="primary"
             size="large"
-            @click="handleSSOLogin"
             class="sso-button"
             :loading="loading"
+            @click="handleSSOLogin"
           >
             统一 SSO 登录
           </el-button>
