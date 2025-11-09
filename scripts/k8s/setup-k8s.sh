@@ -29,14 +29,15 @@ if [ "$K8S_TYPE" = "minikube" ]; then
     # 安装 kubectl
     echo "[1/4] 安装 kubectl..."
     if ! command -v kubectl &> /dev/null; then
-        cat > /etc/yum.repos.d/kubernetes.repo <<EOF
+        # 使用阿里云 Kubernetes 镜像源
+        cat > /etc/yum.repos.d/kubernetes.repo <<'EOF'
 [kubernetes]
 name=Kubernetes
-baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64
 enabled=1
 gpgcheck=1
 repo_gpgcheck=1
-gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
 EOF
         yum install -y kubectl
     else
@@ -46,7 +47,16 @@ EOF
     # 安装 minikube
     echo "[2/4] 安装 minikube..."
     if ! command -v minikube &> /dev/null; then
-        MINIKUBE_VERSION=$(curl -s https://api.github.com/repos/kubernetes/minikube/releases/latest | grep tag_name | cut -d '"' -f 4)
+        # 使用 GitHub API 获取最新版本（如果无法访问，使用固定版本）
+        MINIKUBE_VERSION=$(curl -s https://api.github.com/repos/kubernetes/minikube/releases/latest 2>/dev/null | grep tag_name | cut -d '"' -f 4)
+        if [ -z "$MINIKUBE_VERSION" ]; then
+            # 如果无法访问 GitHub，使用固定版本
+            MINIKUBE_VERSION="v1.32.0"
+            echo "无法获取最新版本，使用固定版本: $MINIKUBE_VERSION"
+        fi
+        # 尝试使用 GitHub 镜像下载
+        curl -Lo minikube https://github.com/kubernetes/minikube/releases/download/${MINIKUBE_VERSION}/minikube-linux-amd64 2>/dev/null || \
+        curl -Lo minikube https://ghproxy.com/https://github.com/kubernetes/minikube/releases/download/${MINIKUBE_VERSION}/minikube-linux-amd64 2>/dev/null || \
         curl -Lo minikube https://storage.googleapis.com/minikube/releases/${MINIKUBE_VERSION}/minikube-linux-amd64
         chmod +x minikube
         mv minikube /usr/local/bin/
@@ -78,9 +88,10 @@ EOF
 elif [ "$K8S_TYPE" = "k3s" ]; then
     echo "使用 k3s 方案安装 Kubernetes..."
     
-    # 安装 k3s
-    echo "[1/3] 安装 k3s..."
-    curl -sfL https://get.k3s.io | sh -
+    # 安装 k3s（使用国内镜像加速）
+    echo "[1/3] 安装 k3s（使用国内镜像）..."
+    # 使用镜像加速安装 k3s
+    curl -sfL https://get.k3s.io | INSTALL_K3S_MIRROR=cn sh -
     
     # 等待 k3s 启动
     echo "[2/3] 等待 k3s 启动..."

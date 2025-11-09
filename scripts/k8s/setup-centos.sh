@@ -14,16 +14,54 @@ if [ "$EUID" -ne 0 ]; then
     exit 1
 fi
 
-# 1. 系统更新
-echo "[1/6] 更新系统包..."
+# 1. 配置国内 yum 镜像源（阿里云）
+echo "[1/7] 配置国内 yum 镜像源..."
+if [ ! -f /etc/yum.repos.d/CentOS-Base.repo.backup ]; then
+    # 备份原有源
+    cp /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup 2>/dev/null || true
+    
+    # 使用阿里云镜像源
+    cat > /etc/yum.repos.d/CentOS-Base.repo <<'EOF'
+[base]
+name=CentOS-$releasever - Base - mirrors.aliyun.com
+failovermethod=priority
+baseurl=http://mirrors.aliyun.com/centos/$releasever/os/$basearch/
+gpgcheck=1
+gpgkey=http://mirrors.aliyun.com/centos/RPM-GPG-KEY-CentOS-7
+
+[updates]
+name=CentOS-$releasever - Updates - mirrors.aliyun.com
+failovermethod=priority
+baseurl=http://mirrors.aliyun.com/centos/$releasever/updates/$basearch/
+gpgcheck=1
+gpgkey=http://mirrors.aliyun.com/centos/RPM-GPG-KEY-CentOS-7
+
+[extras]
+name=CentOS-$releasever - Extras - mirrors.aliyun.com
+failovermethod=priority
+baseurl=http://mirrors.aliyun.com/centos/$releasever/extras/$basearch/
+gpgcheck=1
+gpgkey=http://mirrors.aliyun.com/centos/RPM-GPG-KEY-CentOS-7
+EOF
+    echo "✓ 已配置阿里云 yum 镜像源"
+else
+    echo "✓ yum 镜像源已配置，跳过"
+fi
+
+# 清理并更新 yum 缓存
+yum clean all
+yum makecache
+
+# 2. 系统更新
+echo "[2/7] 更新系统包..."
 yum update -y
 
-# 2. 安装必要工具
-echo "[2/6] 安装必要工具..."
+# 3. 安装必要工具
+echo "[3/7] 安装必要工具..."
 yum install -y vim wget curl net-tools git yum-utils device-mapper-persistent-data lvm2
 
-# 3. 系统资源检查
-echo "[3/6] 检查系统资源..."
+# 4. 系统资源检查
+echo "[4/7] 检查系统资源..."
 echo "--- 内存信息 ---"
 free -h
 echo "--- 磁盘空间 ---"
@@ -39,8 +77,8 @@ if [ "$TOTAL_MEM" -lt 4 ]; then
     echo "警告: 内存不足 4GB，建议至少 4GB 内存"
 fi
 
-# 4. 配置防火墙
-echo "[4/6] 配置防火墙..."
+# 5. 配置防火墙
+echo "[5/7] 配置防火墙..."
 systemctl start firewalld
 systemctl enable firewalld
 
@@ -56,16 +94,16 @@ firewall-cmd --reload
 
 echo "防火墙规则已配置"
 
-# 5. 配置 SELinux
-echo "[5/6] 配置 SELinux..."
+# 6. 配置 SELinux
+echo "[6/7] 配置 SELinux..."
 # 设置为 permissive 模式（允许但记录违规）
 setenforce 0
 sed -i 's/^SELINUX=.*/SELINUX=permissive/' /etc/selinux/config
 
 echo "SELinux 已设置为 permissive 模式"
 
-# 6. 禁用 swap（Kubernetes 要求）
-echo "[6/6] 禁用 swap..."
+# 7. 禁用 swap（Kubernetes 要求）
+echo "[7/7] 禁用 swap..."
 swapoff -a
 sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
 

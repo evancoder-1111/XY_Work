@@ -19,9 +19,18 @@ echo "[1/5] 卸载旧版本 Docker..."
 yum remove -y docker docker-client docker-client-latest docker-common \
     docker-latest docker-latest-logrotate docker-logrotate docker-engine 2>/dev/null || true
 
-# 2. 添加 Docker 官方仓库
-echo "[2/5] 添加 Docker 官方仓库..."
-yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+# 2. 添加 Docker 仓库（使用阿里云镜像）
+echo "[2/5] 添加 Docker 仓库（阿里云镜像）..."
+# 使用阿里云 Docker 仓库镜像
+cat > /etc/yum.repos.d/docker-ce.repo <<'EOF'
+[docker-ce-stable]
+name=Docker CE Stable - $basearch
+baseurl=https://mirrors.aliyun.com/docker-ce/linux/centos/$releasever/$basearch/stable
+enabled=1
+gpgcheck=1
+gpgkey=https://mirrors.aliyun.com/docker-ce/linux/centos/gpg
+EOF
+yum makecache fast
 
 # 3. 安装 Docker CE
 echo "[3/5] 安装 Docker CE..."
@@ -52,7 +61,17 @@ EOF
 # 启动 Docker 并设置开机自启
 systemctl daemon-reload
 systemctl enable docker
-systemctl start docker
+
+# 如果 Docker 已经在运行，需要重启以使镜像加速器配置生效
+if systemctl is-active --quiet docker; then
+    echo "重启 Docker 以使镜像加速器配置生效..."
+    systemctl restart docker
+else
+    systemctl start docker
+fi
+
+# 等待 Docker 启动完成
+sleep 5
 
 # 5. 配置用户权限
 echo "[5/5] 配置用户权限..."
@@ -73,10 +92,20 @@ echo "=========================================="
 docker --version
 docker info | head -20
 
-# 测试 Docker 运行
+# 测试 Docker 运行（可选，失败不影响安装）
 echo ""
 echo "测试 Docker 运行..."
-docker run --rm hello-world
+if docker run --rm hello-world 2>/dev/null; then
+    echo "✓ Docker 测试成功"
+else
+    echo "⚠ Docker 测试失败（可能是网络问题，不影响 Docker 安装）"
+    echo "提示：如果无法访问 Docker Hub，请检查："
+    echo "  1. 网络连接是否正常"
+    echo "  2. 镜像加速器配置是否正确（已配置阿里云和 USTC 镜像）"
+    echo "  3. 防火墙是否阻止了连接"
+    echo ""
+    echo "Docker 已成功安装，可以继续后续步骤"
+fi
 
 echo ""
 echo "=========================================="
