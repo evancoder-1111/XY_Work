@@ -41,7 +41,9 @@ gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors
 EOF
         yum install -y kubectl
     else
-        echo "kubectl 已安装: $(kubectl version --client --short)"
+        # 兼容旧版本 kubectl（可能不支持 --short）
+        KUBECTL_VERSION=$(kubectl version --client 2>/dev/null | grep -oP 'GitVersion:"\K[^"]+' || kubectl version --client 2>/dev/null | head -1 || echo "已安装")
+        echo "kubectl 已安装: $KUBECTL_VERSION"
     fi
     
     # 安装 minikube
@@ -60,12 +62,21 @@ EOF
         echo "下载进度："
         if curl -L --connect-timeout 10 --max-time 300 --progress \
            https://mirrors.aliyun.com/kubernetes/minikube/releases/download/${MINIKUBE_VERSION}/minikube-linux-amd64 \
-           -o minikube && [ -f minikube ] && [ -s minikube ]; then
-            DOWNLOAD_SUCCESS=true
-            echo ""
-            echo "✓ 从阿里云镜像站下载成功"
+           -o minikube 2>&1 && [ -f minikube ] && [ -s minikube ]; then
+            # 检查下载的文件是否是二进制文件（不是 HTML）
+            if file minikube | grep -q "ELF\|executable\|binary" || head -1 minikube | grep -qv "<!DOCTYPE\|<html"; then
+                DOWNLOAD_SUCCESS=true
+                echo ""
+                echo "✓ 从阿里云镜像站下载成功"
+            else
+                echo ""
+                echo "✗ 下载的文件不是二进制文件（可能是 HTML 错误页面），尝试备用源..."
+                rm -f minikube
+            fi
         else
+            echo ""
             echo "阿里云镜像站下载失败，尝试备用源..."
+            rm -f minikube
         fi
         
         # 方法2：使用 GitHub 代理（ghproxy.com，备用）
@@ -74,12 +85,21 @@ EOF
             echo "下载进度："
             if curl -L --connect-timeout 10 --max-time 300 --progress \
                https://ghproxy.com/https://github.com/kubernetes/minikube/releases/download/${MINIKUBE_VERSION}/minikube-linux-amd64 \
-               -o minikube && [ -f minikube ] && [ -s minikube ]; then
-                DOWNLOAD_SUCCESS=true
-                echo ""
-                echo "✓ 从 GitHub 代理下载成功"
+               -o minikube 2>&1 && [ -f minikube ] && [ -s minikube ]; then
+                # 检查下载的文件是否是二进制文件
+                if file minikube | grep -q "ELF\|executable\|binary" || head -1 minikube | grep -qv "<!DOCTYPE\|<html"; then
+                    DOWNLOAD_SUCCESS=true
+                    echo ""
+                    echo "✓ 从 GitHub 代理下载成功"
+                else
+                    echo ""
+                    echo "✗ 下载的文件不是二进制文件，尝试下一个源..."
+                    rm -f minikube
+                fi
             else
+                echo ""
                 echo "下载失败，尝试下一个源..."
+                rm -f minikube
             fi
         fi
         
@@ -89,12 +109,21 @@ EOF
             echo "下载进度："
             if curl -L --connect-timeout 10 --max-time 300 --progress \
                https://mirror.ghproxy.com/https://github.com/kubernetes/minikube/releases/download/${MINIKUBE_VERSION}/minikube-linux-amd64 \
-               -o minikube && [ -f minikube ] && [ -s minikube ]; then
-                DOWNLOAD_SUCCESS=true
-                echo ""
-                echo "✓ 从国内镜像下载成功"
+               -o minikube 2>&1 && [ -f minikube ] && [ -s minikube ]; then
+                # 检查下载的文件是否是二进制文件
+                if file minikube | grep -q "ELF\|executable\|binary" || head -1 minikube | grep -qv "<!DOCTYPE\|<html"; then
+                    DOWNLOAD_SUCCESS=true
+                    echo ""
+                    echo "✓ 从国内镜像下载成功"
+                else
+                    echo ""
+                    echo "✗ 下载的文件不是二进制文件，尝试下一个源..."
+                    rm -f minikube
+                fi
             else
+                echo ""
                 echo "下载失败，尝试下一个源..."
+                rm -f minikube
             fi
         fi
         
@@ -104,12 +133,21 @@ EOF
             echo "下载进度："
             if curl -L --connect-timeout 10 --max-time 300 --progress \
                https://github.com/kubernetes/minikube/releases/download/${MINIKUBE_VERSION}/minikube-linux-amd64 \
-               -o minikube && [ -f minikube ] && [ -s minikube ]; then
-                DOWNLOAD_SUCCESS=true
-                echo ""
-                echo "✓ 从 GitHub 下载成功"
+               -o minikube 2>&1 && [ -f minikube ] && [ -s minikube ]; then
+                # 检查下载的文件是否是二进制文件
+                if file minikube | grep -q "ELF\|executable\|binary" || head -1 minikube | grep -qv "<!DOCTYPE\|<html"; then
+                    DOWNLOAD_SUCCESS=true
+                    echo ""
+                    echo "✓ 从 GitHub 下载成功"
+                else
+                    echo ""
+                    echo "✗ 下载的文件不是二进制文件，尝试最后一个源..."
+                    rm -f minikube
+                fi
             else
+                echo ""
                 echo "下载失败，尝试最后一个源..."
+                rm -f minikube
             fi
         fi
         
@@ -119,10 +157,21 @@ EOF
             echo "下载进度："
             if curl -L --connect-timeout 10 --max-time 300 --progress \
                https://storage.googleapis.com/minikube/releases/${MINIKUBE_VERSION}/minikube-linux-amd64 \
-               -o minikube && [ -f minikube ] && [ -s minikube ]; then
-                DOWNLOAD_SUCCESS=true
+               -o minikube 2>&1 && [ -f minikube ] && [ -s minikube ]; then
+                # 检查下载的文件是否是二进制文件
+                if file minikube | grep -q "ELF\|executable\|binary" || head -1 minikube | grep -qv "<!DOCTYPE\|<html"; then
+                    DOWNLOAD_SUCCESS=true
+                    echo ""
+                    echo "✓ 从 Google Storage 下载成功"
+                else
+                    echo ""
+                    echo "✗ 下载的文件不是二进制文件"
+                    rm -f minikube
+                fi
+            else
                 echo ""
-                echo "✓ 从 Google Storage 下载成功"
+                echo "下载失败"
+                rm -f minikube
             fi
         fi
         
