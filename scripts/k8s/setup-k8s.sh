@@ -48,7 +48,20 @@ EOF
     
     # 安装 minikube
     echo "[2/4] 安装 minikube..."
-    if ! command -v minikube &> /dev/null; then
+    # 检查 minikube 是否存在且是有效的二进制文件
+    MINIKUBE_EXISTS=false
+    if command -v minikube &> /dev/null; then
+        # 验证 minikube 是否是有效的二进制文件（不是 HTML）
+        if file $(which minikube) 2>/dev/null | grep -q "ELF\|executable\|binary" || \
+           head -1 $(which minikube) 2>/dev/null | grep -qv "<!DOCTYPE\|<html"; then
+            MINIKUBE_EXISTS=true
+        else
+            echo "检测到错误的 minikube 文件（HTML），将重新下载..."
+            sudo rm -f $(which minikube) /usr/local/bin/minikube
+        fi
+    fi
+    
+    if [ "$MINIKUBE_EXISTS" = false ]; then
         # 使用固定版本（避免网络问题）
         MINIKUBE_VERSION="v1.32.0"
         echo "使用固定版本: $MINIKUBE_VERSION"
@@ -192,10 +205,12 @@ EOF
         
         # 设置执行权限并安装
         chmod +x minikube
-        mv minikube /usr/local/bin/
+        sudo mv minikube /usr/local/bin/
         echo "✓ minikube 安装完成"
     else
-        echo "minikube 已安装: $(minikube version --short)"
+        # minikube 已存在且是有效的二进制文件
+        MINIKUBE_VERSION_OUTPUT=$(minikube version --short 2>/dev/null || minikube version 2>/dev/null | head -1 || echo "已安装")
+        echo "minikube 已安装: $MINIKUBE_VERSION_OUTPUT"
     fi
     
     # 启动 minikube（配置使用阿里云镜像加速）
