@@ -57,7 +57,8 @@ EOF
         
         # 方法1：使用阿里云镜像站（首选）
         echo "尝试从阿里云镜像站下载..."
-        if curl -L --connect-timeout 10 --max-time 300 --progress-bar \
+        echo "下载进度："
+        if curl -L --connect-timeout 10 --max-time 300 --progress \
            https://mirrors.aliyun.com/kubernetes/minikube/releases/download/${MINIKUBE_VERSION}/minikube-linux-amd64 \
            -o minikube && [ -f minikube ] && [ -s minikube ]; then
             DOWNLOAD_SUCCESS=true
@@ -70,7 +71,8 @@ EOF
         # 方法2：使用 GitHub 代理（ghproxy.com，备用）
         if [ "$DOWNLOAD_SUCCESS" = false ]; then
             echo "尝试从 GitHub 代理下载（国内镜像）..."
-            if curl -L --connect-timeout 10 --max-time 300 --progress-bar \
+            echo "下载进度："
+            if curl -L --connect-timeout 10 --max-time 300 --progress \
                https://ghproxy.com/https://github.com/kubernetes/minikube/releases/download/${MINIKUBE_VERSION}/minikube-linux-amd64 \
                -o minikube && [ -f minikube ] && [ -s minikube ]; then
                 DOWNLOAD_SUCCESS=true
@@ -84,7 +86,8 @@ EOF
         # 方法3：使用其他国内镜像（备用）
         if [ "$DOWNLOAD_SUCCESS" = false ]; then
             echo "尝试从其他国内镜像下载..."
-            if curl -L --connect-timeout 10 --max-time 300 --progress-bar \
+            echo "下载进度："
+            if curl -L --connect-timeout 10 --max-time 300 --progress \
                https://mirror.ghproxy.com/https://github.com/kubernetes/minikube/releases/download/${MINIKUBE_VERSION}/minikube-linux-amd64 \
                -o minikube && [ -f minikube ] && [ -s minikube ]; then
                 DOWNLOAD_SUCCESS=true
@@ -98,7 +101,8 @@ EOF
         # 方法4：使用 GitHub 直接下载（备用）
         if [ "$DOWNLOAD_SUCCESS" = false ]; then
             echo "尝试从 GitHub 直接下载..."
-            if curl -L --connect-timeout 10 --max-time 300 --progress-bar \
+            echo "下载进度："
+            if curl -L --connect-timeout 10 --max-time 300 --progress \
                https://github.com/kubernetes/minikube/releases/download/${MINIKUBE_VERSION}/minikube-linux-amd64 \
                -o minikube && [ -f minikube ] && [ -s minikube ]; then
                 DOWNLOAD_SUCCESS=true
@@ -112,7 +116,8 @@ EOF
         # 方法5：使用 Google Storage（最后备用）
         if [ "$DOWNLOAD_SUCCESS" = false ]; then
             echo "尝试从 Google Storage 下载..."
-            if curl -L --connect-timeout 10 --max-time 300 --progress-bar \
+            echo "下载进度："
+            if curl -L --connect-timeout 10 --max-time 300 --progress \
                https://storage.googleapis.com/minikube/releases/${MINIKUBE_VERSION}/minikube-linux-amd64 \
                -o minikube && [ -f minikube ] && [ -s minikube ]; then
                 DOWNLOAD_SUCCESS=true
